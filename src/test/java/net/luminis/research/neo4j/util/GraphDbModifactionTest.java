@@ -14,7 +14,7 @@ public class GraphDbModifactionTest {
 	}
 
 	@Test
-	public void graphDbModificationShouldHaveAPerformMethod() {
+	public void graphDbModificationShouldHaveAPerformMethod() throws GrapDbModifcationException {
 		final PerformSpy spy = new PerformSpy();
 		GraphDbModification modification = new GraphDbModification() {
 			@Override
@@ -26,6 +26,20 @@ public class GraphDbModifactionTest {
 		modification.perform(null);
 
 		assertTrue(spy.called);
+	}
+
+	@Test(expected=GrapDbModifcationException.class)
+	public void graphDbModificationIsAllowedToThrowException() throws GrapDbModifcationException {
+		GraphDbModification modification = new GraphDbModification() {
+
+			@Override
+			public void perform(GraphDatabaseService aGraphDb) throws GrapDbModifcationException {
+				throw new GrapDbModifcationException();
+
+			}
+		};
+
+		modification.perform(null);
 	}
 
 	class PerformSpy {
