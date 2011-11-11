@@ -14,6 +14,7 @@ public abstract class AbstractGraphDbModificationService implements GrapDbModifi
 		GraphDatabaseService graphDb = getGraphDb();
 		Transaction tx = graphDb.beginTx();
 		try {
+			beforeModificationAttempt();
 			modification.perform(graphDb);
 			tx.success();
 			afterSuccesfullModification();
@@ -28,6 +29,10 @@ public abstract class AbstractGraphDbModificationService implements GrapDbModifi
 
 	public abstract GraphDatabaseService getGraphDb();
 
+	public void beforeModificationAttempt() {
+		// Do nothing
+	}
+
 	public void afterModificationException() {
 		// Do nothing
 	}
@@ -40,6 +45,4 @@ public abstract class AbstractGraphDbModificationService implements GrapDbModifi
 		// Do nothing
 
 	}
-
-
 }

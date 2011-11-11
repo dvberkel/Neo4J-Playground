@@ -69,7 +69,7 @@ public class AbstractGraphDbModificationServiceTest {
 
 		service.performInTransaction(new NullModification());
 
-		assertEquals("mSA", spy.toString());
+		assertEquals("BmSA", spy.toString());
 	}
 
 	@Test
@@ -79,7 +79,17 @@ public class AbstractGraphDbModificationServiceTest {
 
 		service.performInTransaction(new ExceptionModification());
 
-		assertEquals("MsA", spy.toString());
+		assertEquals("BMsA", spy.toString());
+	}
+
+	@Test
+	public void beforModificationExceptionCallbackShouldBeProvided() {
+		final CallbackSpy spy = new CallbackSpy();
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(graphDb, spy);
+
+		service.performInTransaction(new ExceptionModification());
+
+		assertEquals("BMsA", spy.toString());
 	}
 
 	@Test
@@ -107,6 +117,7 @@ public class AbstractGraphDbModificationServiceTest {
 	}
 
 	class CallbackSpy {
+		public boolean beforeModificationAttemptCalled = false;
 		public boolean afterModificationExceptionCalled = false;
 		public boolean afterSuccesfulModificationCalled = false;
 		public boolean afterModificationAttemptCalled = false;
@@ -114,6 +125,7 @@ public class AbstractGraphDbModificationServiceTest {
 		@Override
 		public String toString() {
 			StringBuilder builder = new StringBuilder();
+			builder.append(beforeModificationAttemptCalled ? 'B' : 'b');
 			builder.append(afterModificationExceptionCalled ? 'M': 'm');
 			builder.append(afterSuccesfulModificationCalled ? 'S': 's');
 			builder.append(afterModificationAttemptCalled ? 'A': 'a');
@@ -133,6 +145,11 @@ public class AbstractGraphDbModificationServiceTest {
 		@Override
 		public GraphDatabaseService getGraphDb() {
 			return graphDatabase;
+		}
+
+		@Override
+		public void beforeModificationAttempt() {
+			spy.beforeModificationAttemptCalled = true;
 		}
 
 		@Override
