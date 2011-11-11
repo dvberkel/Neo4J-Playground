@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotInTransactionException;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
@@ -55,6 +56,25 @@ public class ProbingNeo4JDatabaseTest {
 			Node node = graphDb.createNode();
 			node.setProperty(key, expectedMessage);
 			assertEquals(expectedMessage, node.getProperty(key));
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+	}
+
+	private static enum RelationType implements RelationshipType {
+		SUCCESOR;
+	}
+
+	@Test
+	public void nodesCanBeRelatedByARelationship() {
+		Transaction tx = graphDb.beginTx();
+		try {
+			Node zero = graphDb.createNode();
+			Node one = graphDb.createNode();
+
+			zero.createRelationshipTo(one, RelationType.SUCCESOR);
+			tx.success();
 		} finally {
 			tx.finish();
 		}
