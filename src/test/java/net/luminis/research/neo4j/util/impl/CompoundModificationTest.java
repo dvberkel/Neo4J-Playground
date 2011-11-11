@@ -22,7 +22,7 @@ public class CompoundModificationTest {
 		assertTrue(modification instanceof GraphDbModification);
 	}
 
-	@Test
+	@Test(expected=GrapDbModifcationException.class)
 	public void shouldPerformModificationsSequenctially() throws GrapDbModifcationException {
 		final SequentialSpy spy = new SequentialSpy();
 		GraphDbModification modification = new CompoundGraphDbModification(
