@@ -1,6 +1,7 @@
 package net.luminis.research.neo4j.service.impl;
 
 import net.luminis.research.neo4j.service.GrapDbModificationService;
+import net.luminis.research.neo4j.util.GrapDbModifcationException;
 import net.luminis.research.neo4j.util.GraphDbModification;
 
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -9,8 +10,12 @@ public abstract class AbstractGraphDbModificationService implements GrapDbModifi
 
 	@Override
 	public void performInTransaction(GraphDbModification modification) {
-		afterModificationException();
-		afterSuccesfullModification();
+		try {
+			modification.perform(getGraphDb());
+			afterSuccesfullModification();
+		} catch (GrapDbModifcationException e) {
+			afterModificationException();
+		}
 	}
 
 	public abstract GraphDatabaseService getGraphDb();

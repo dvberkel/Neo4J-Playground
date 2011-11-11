@@ -43,18 +43,7 @@ public class AbstractGraphDbModificationServiceTest {
 	@Test
 	public void afterSuccesfullModificationCallbackShouldBeProvided() {
 		final CallbackSpy spy = new CallbackSpy();
-		AbstractGraphDbModificationService service = new AbstractGraphDbModificationService() {
-
-			@Override
-			public GraphDatabaseService getGraphDb() {
-				return null;
-			}
-
-			@Override
-			public void afterSuccesfullModification() {
-				spy.afterSuccesfulModificationCalled = true;
-			}
-		};
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(spy);
 
 		service.performInTransaction(new NullModification());
 
@@ -64,18 +53,7 @@ public class AbstractGraphDbModificationServiceTest {
 	@Test
 	public void afterModificationExceptionCallbackShouldBeProvided() {
 		final CallbackSpy spy = new CallbackSpy();
-		AbstractGraphDbModificationService service = new AbstractGraphDbModificationService() {
-
-			@Override
-			public GraphDatabaseService getGraphDb() {
-				return null;
-			}
-
-			@Override
-			public void afterModificationException() {
-				spy.afterModificationExceptionCalled  = true;
-			}
-		};
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(spy);
 
 		service.performInTransaction(new ExceptionModification());
 
@@ -92,6 +70,29 @@ public class AbstractGraphDbModificationServiceTest {
 			builder.append(afterModificationExceptionCalled ? 'M': 'm');
 			builder.append(afterSuccesfulModificationCalled ? 'S': 's');
 			return builder.toString();
+		}
+	}
+
+	class SpiedUponGraphDbModificationService extends AbstractGraphDbModificationService {
+		private final CallbackSpy spy;
+
+		public SpiedUponGraphDbModificationService(CallbackSpy spy) {
+			this.spy = spy;
+		}
+
+		@Override
+		public GraphDatabaseService getGraphDb() {
+			return null;
+		}
+
+		@Override
+		public void afterModificationException() {
+			spy.afterModificationExceptionCalled = true;
+		}
+
+		@Override
+		public void afterSuccesfullModification() {
+			spy.afterSuccesfulModificationCalled = true;
 		}
 	}
 
