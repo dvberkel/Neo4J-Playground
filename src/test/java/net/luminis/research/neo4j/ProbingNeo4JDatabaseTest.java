@@ -14,6 +14,7 @@ public class ProbingNeo4JDatabaseTest {
 	@BeforeClass
 	public static void createGraphDatabase() {
 		graphDb = new EmbeddedGraphDatabase("src/test/resources/graphdbs/starting");
+		registerShutdownHook(graphDb);
 	}
 
 	@Test
@@ -26,4 +27,12 @@ public class ProbingNeo4JDatabaseTest {
 		graphDb.shutdown();
 	}
 
+	private static void registerShutdownHook(final GraphDatabaseService aGraphDb) {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				aGraphDb.shutdown();
+			}
+		});
+	}
 }
