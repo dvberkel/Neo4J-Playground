@@ -3,15 +3,36 @@ package net.luminis.research.neo4j.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import net.luminis.research.neo4j.service.GrapDbModificationService;
 import net.luminis.research.neo4j.util.GrapDbModifcationException;
 import net.luminis.research.neo4j.util.GraphDbModification;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 
 public class AbstractGraphDbModificationServiceTest {
+	private Transaction transaction;
+	private GraphDatabaseService graphDb;
+
+	@Before
+	public void createMockGraphDatabase() {
+		transaction = mock(Transaction.class);
+		graphDb = mock(GraphDatabaseService.class);
+		when(graphDb.beginTx()).thenReturn(transaction);
+	}
+
+	@Test
+	public void mocksShouldBeInPlace() {
+		assertNotNull(transaction);
+		assertNotNull(graphDb);
+		assertSame(transaction, graphDb.beginTx());
+	}
 
 	@Test
 	public void shouldExist() {
