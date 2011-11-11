@@ -85,29 +85,42 @@ public class ProbingNeo4JDatabaseTest {
 
 	@Test
 	public void countNodes() {
-		int nodeCount = 0;
-
-		for (@SuppressWarnings("unused") Node node : graphDb.getAllNodes()) {
-			nodeCount++;
-		}
-
-		assertTrue(nodeCount > 0);
+		assertTrue(countNodesOf(graphDb) > 0);
 	}
 
 	@Test
 	public void removeNodesWithARelation() {
+		int originalNodeCount = countNodesOf(graphDb);
+		int removedNodeCount = 0;
+
 		Transaction tx = graphDb.beginTx();
 		try {
 			for (Node node : graphDb.getAllNodes()) {
+				int removedRelationshipCount = 0;
 				for (Relationship relationship : node.getRelationships()) {
 					relationship.delete();
+					removedRelationshipCount++;
 				}
-				node.delete();
+				if (removedRelationshipCount > 0) {
+					node.delete();
+					removedNodeCount++;
+				}
 			}
 			tx.success();
 		} finally {
 			tx.finish();
 		}
+
+		int finalNodeCount = countNodesOf(graphDb);
+		assertEquals(Integer.valueOf(originalNodeCount), Integer.valueOf(finalNodeCount + removedNodeCount));
+	}
+
+	private int countNodesOf(GraphDatabaseService aGraphDb) {
+		int nodeCount = 0;
+		for (@SuppressWarnings("unused") Node node : aGraphDb.getAllNodes()) {
+			nodeCount++;
+		}
+		return nodeCount;
 	}
 
 	@AfterClass
