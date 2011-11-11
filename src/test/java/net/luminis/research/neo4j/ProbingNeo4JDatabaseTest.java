@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.NotInTransactionException;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
@@ -35,6 +36,11 @@ public class ProbingNeo4JDatabaseTest {
 		} finally {
 			tx.finish();
 		}
+	}
+
+	@Test(expected=NotInTransactionException.class)
+	public void nodeCreationOutsideTransactionFail() {
+		graphDb.createNode();
 	}
 
 	@AfterClass
