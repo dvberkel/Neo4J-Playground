@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import net.luminis.research.neo4j.service.GrapDbModificationService;
 import net.luminis.research.neo4j.util.GrapDbModifcationException;
@@ -64,7 +65,7 @@ public class AbstractGraphDbModificationServiceTest {
 	@Test
 	public void afterSuccesfullModificationCallbackShouldBeProvided() {
 		final CallbackSpy spy = new CallbackSpy();
-		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(spy);
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(graphDb, spy);
 
 		service.performInTransaction(new NullModification());
 
@@ -74,11 +75,35 @@ public class AbstractGraphDbModificationServiceTest {
 	@Test
 	public void afterModificationExceptionCallbackShouldBeProvided() {
 		final CallbackSpy spy = new CallbackSpy();
-		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(spy);
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(graphDb, spy);
 
 		service.performInTransaction(new ExceptionModification());
 
 		assertEquals("Ms", spy.toString());
+	}
+
+	@Test
+	public void behaviourOfSuccesfullPerformInTransaction() {
+		final CallbackSpy spy = new CallbackSpy();
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(graphDb, spy);
+
+		service.performInTransaction(new NullModification());
+
+		verify(graphDb).beginTx();
+		verify(transaction).success();
+		verify(transaction).finish();
+	}
+
+	@Test
+	public void behaviourOfUnsuccesfullPerformInTransaction() {
+		final CallbackSpy spy = new CallbackSpy();
+		AbstractGraphDbModificationService service = new SpiedUponGraphDbModificationService(graphDb, spy);
+
+		service.performInTransaction(new ExceptionModification());
+
+		verify(graphDb).beginTx();
+		verify(transaction).failure();
+		verify(transaction).finish();
 	}
 
 	class CallbackSpy {
@@ -95,15 +120,17 @@ public class AbstractGraphDbModificationServiceTest {
 	}
 
 	class SpiedUponGraphDbModificationService extends AbstractGraphDbModificationService {
+		private final GraphDatabaseService graphDatabase;
 		private final CallbackSpy spy;
 
-		public SpiedUponGraphDbModificationService(CallbackSpy spy) {
+		public SpiedUponGraphDbModificationService(GraphDatabaseService graphDatabase, CallbackSpy spy) {
+			this.graphDatabase = graphDatabase;
 			this.spy = spy;
 		}
 
 		@Override
 		public GraphDatabaseService getGraphDb() {
-			return null;
+			return graphDatabase;
 		}
 
 		@Override
