@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,6 +29,7 @@ public class ProbingNeo4JDatabaseTest {
 		graphDb = new EmbeddedGraphDatabase(GRAPH_DB_PATH);
 		registerShutdownHook(graphDb);
 		createNode(graphDb);
+		createRelationship(graphDb);
 	}
 
 	@Test
@@ -66,7 +69,7 @@ public class ProbingNeo4JDatabaseTest {
 	}
 
 	private static enum RelationType implements RelationshipType {
-		SUCCESOR;
+		SUCCESOR, ON;
 	}
 
 	@Test
@@ -95,16 +98,17 @@ public class ProbingNeo4JDatabaseTest {
 
 		Transaction tx = graphDb.beginTx();
 		try {
+			Set<Node> toRemove = new HashSet<Node>();
 			for (Node node : graphDb.getAllNodes()) {
-				int removedRelationshipCount = 0;
-				for (Relationship relationship : node.getRelationships()) {
+				for (Relationship relationship : node.getRelationships(RelationType.ON)) {
+					toRemove.add(relationship.getStartNode());
+					toRemove.add(relationship.getEndNode());
 					relationship.delete();
-					removedRelationshipCount++;
 				}
-				if (removedRelationshipCount > 0) {
-					node.delete();
-					removedNodeCount++;
-				}
+			}
+			for (Node node : toRemove) {
+				node.delete();
+				removedNodeCount++;
 			}
 			tx.success();
 		} finally {
@@ -142,6 +146,19 @@ public class ProbingNeo4JDatabaseTest {
 		Transaction tx = aGraphDb.beginTx();
 		try {
 			aGraphDb.createNode();
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+	}
+
+	private static void createRelationship(GraphDatabaseService aGraphDb) {
+		Transaction tx = aGraphDb.beginTx();
+		try {
+			Node point = aGraphDb.createNode();
+			Node plane = aGraphDb.createNode();
+
+			point.createRelationshipTo(plane, RelationType.ON);
 			tx.success();
 		} finally {
 			tx.finish();
