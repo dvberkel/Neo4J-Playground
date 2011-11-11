@@ -22,17 +22,23 @@ public abstract class AbstractGraphDbModificationService implements GrapDbModifi
 			afterModificationException();
 		} finally {
 			tx.finish();
+			afterModificationAttempt();
 		}
 	}
 
 	public abstract GraphDatabaseService getGraphDb();
 
 	public void afterModificationException() {
-		// TODO Auto-generated method stub
+		// Do nothing
 	}
 
 	public void afterSuccesfullModification() {
 		// Do nothing
+	}
+
+	void afterModificationAttempt() {
+		// Do nothing
+
 	}
 
 
