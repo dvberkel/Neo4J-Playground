@@ -2,6 +2,8 @@ package net.luminis.research.neo4j;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,6 +16,7 @@ public class ProbingNeo4JDatabaseTest {
 
 	@BeforeClass
 	public static void createGraphDatabase() {
+		deleteDir(GRAPH_DB_PATH);
 		graphDb = new EmbeddedGraphDatabase(GRAPH_DB_PATH);
 		registerShutdownHook(graphDb);
 	}
@@ -26,6 +29,7 @@ public class ProbingNeo4JDatabaseTest {
 	@AfterClass
 	public static void setupDatabase() {
 		graphDb.shutdown();
+		deleteDir(GRAPH_DB_PATH);
 	}
 
 	private static void registerShutdownHook(final GraphDatabaseService aGraphDb) {
@@ -35,5 +39,23 @@ public class ProbingNeo4JDatabaseTest {
 				aGraphDb.shutdown();
 			}
 		});
+	}
+
+	private static boolean deleteDir(final String path) {
+		return deleteDir(new File(path));
+	}
+
+	private static boolean deleteDir(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (String fileName : children) {
+				boolean success = deleteDir(new File(dir, fileName));
+				if (!success) {
+					return false;
+				}
+			}
+		}
+
+		return dir.delete();
 	}
 }
