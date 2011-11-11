@@ -31,7 +31,6 @@
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
 			<version>1.4.2</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	
