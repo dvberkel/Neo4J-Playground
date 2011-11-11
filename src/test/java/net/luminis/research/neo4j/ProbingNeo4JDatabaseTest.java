@@ -9,11 +9,12 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 public class ProbingNeo4JDatabaseTest {
+	private static final String GRAPH_DB_PATH = "src/test/resources/graphdbs/starting";
 	private static GraphDatabaseService graphDb;
 
 	@BeforeClass
 	public static void createGraphDatabase() {
-		graphDb = new EmbeddedGraphDatabase("src/test/resources/graphdbs/starting");
+		graphDb = new EmbeddedGraphDatabase(GRAPH_DB_PATH);
 		registerShutdownHook(graphDb);
 	}
 
