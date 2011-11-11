@@ -1,5 +1,6 @@
 package net.luminis.research.neo4j;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
@@ -8,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotInTransactionException;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
@@ -41,6 +43,21 @@ public class ProbingNeo4JDatabaseTest {
 	@Test(expected=NotInTransactionException.class)
 	public void nodeCreationOutsideTransactionFail() {
 		graphDb.createNode();
+	}
+
+	@Test
+	public void nodesCanHaveProperties() {
+		String key = "message";
+		String expectedMessage = "Hello World!";
+
+		Transaction tx = graphDb.beginTx();
+		try {
+			Node node = graphDb.createNode();
+			node.setProperty(key, expectedMessage);
+			assertEquals(expectedMessage, node.getProperty(key));
+		} finally {
+			tx.finish();
+		}
 	}
 
 	@AfterClass
