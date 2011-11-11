@@ -69,7 +69,7 @@ public class AbstractGraphDbModificationServiceTest {
 
 		service.performInTransaction(new NullModification());
 
-		assertEquals("BmSA", spy.toString());
+		assertEquals("BeSA", spy.toString());
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class AbstractGraphDbModificationServiceTest {
 
 		service.performInTransaction(new ExceptionModification());
 
-		assertEquals("BMsA", spy.toString());
+		assertEquals("BEsA", spy.toString());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class AbstractGraphDbModificationServiceTest {
 
 		service.performInTransaction(new ExceptionModification());
 
-		assertEquals("BMsA", spy.toString());
+		assertEquals("BEsA", spy.toString());
 	}
 
 	@Test
@@ -126,7 +126,7 @@ public class AbstractGraphDbModificationServiceTest {
 		public String toString() {
 			StringBuilder builder = new StringBuilder();
 			builder.append(beforeModificationAttemptCalled ? 'B' : 'b');
-			builder.append(afterModificationExceptionCalled ? 'M': 'm');
+			builder.append(afterModificationExceptionCalled ? 'E': 'e');
 			builder.append(afterSuccesfulModificationCalled ? 'S': 's');
 			builder.append(afterModificationAttemptCalled ? 'A': 'a');
 			return builder.toString();
