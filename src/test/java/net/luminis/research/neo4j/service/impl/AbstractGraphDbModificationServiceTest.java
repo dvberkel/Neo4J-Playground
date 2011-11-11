@@ -1,5 +1,6 @@
 package net.luminis.research.neo4j.service.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -51,13 +52,13 @@ public class AbstractGraphDbModificationServiceTest {
 
 			@Override
 			public void afterSuccesfullModification() {
-				spy.called = true;
+				spy.afterSuccesfulModificationCalled = true;
 			}
 		};
 
 		service.performInTransaction(new NullModification());
 
-		assertTrue(spy.called);
+		assertEquals("mS", spy.toString());
 	}
 
 	@Test
@@ -72,17 +73,26 @@ public class AbstractGraphDbModificationServiceTest {
 
 			@Override
 			public void afterModificationException() {
-				spy.called = true;
+				spy.afterModificationExceptionCalled  = true;
 			}
 		};
 
 		service.performInTransaction(new ExceptionModification());
 
-		assertTrue(spy.called);
+		assertEquals("Ms", spy.toString());
 	}
 
 	class CallbackSpy {
-		public boolean called = false;
+		public boolean afterModificationExceptionCalled = false;
+		public boolean afterSuccesfulModificationCalled = false;
+
+		@Override
+		public String toString() {
+			StringBuilder builder = new StringBuilder();
+			builder.append(afterModificationExceptionCalled ? 'M': 'm');
+			builder.append(afterSuccesfulModificationCalled ? 'S': 's');
+			return builder.toString();
+		}
 	}
 
 	class NullModification implements GraphDbModification {
