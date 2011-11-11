@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotInTransactionException;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
@@ -91,6 +92,22 @@ public class ProbingNeo4JDatabaseTest {
 		}
 
 		assertTrue(nodeCount > 0);
+	}
+
+	@Test
+	public void removeNodesWithARelation() {
+		Transaction tx = graphDb.beginTx();
+		try {
+			for (Node node : graphDb.getAllNodes()) {
+				for (Relationship relationship : node.getRelationships()) {
+					relationship.delete();
+				}
+				node.delete();
+			}
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 
 	@AfterClass
