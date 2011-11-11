@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 public class ProbingNeo4JDatabaseTest {
@@ -24,6 +25,16 @@ public class ProbingNeo4JDatabaseTest {
 	@Test
 	public void graphDbShouldBeInitialized() {
 		assertNotNull(graphDb);
+	}
+
+	@Test
+	public void graphDbModificationsAreDemarcatedByATransaction() {
+		Transaction tx = graphDb.beginTx();
+		try {
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 
 	@AfterClass
