@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface CollatzDomain {
 
-	public abstract List<Integer> elements();
+	public List<Integer> elements();
+
+	public void imageOf(Integer element, Integer image);
 
 }

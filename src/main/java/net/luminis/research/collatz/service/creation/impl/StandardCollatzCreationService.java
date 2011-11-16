@@ -1,10 +1,9 @@
 package net.luminis.research.collatz.service.creation.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import net.luminis.research.collatz.calculator.CollatzCalculator;
 import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
@@ -18,21 +17,26 @@ public class StandardCollatzCreationService implements CollatzCreationService {
 
 	@Override
 	public CollatzDomain createDomain(Integer low, Integer high) {
-		return new StandardCollatzDomain(createRange(low, high));
+		Map<Integer,Integer> range = createRange(low, high);
+		CollatzDomain domain = new StandardCollatzDomain();
+		for (Entry<Integer,Integer> entry : range.entrySet()) {
+			domain.imageOf(entry.getKey(), entry.getValue());
+		}
+		return domain;
 	}
 
-	private List<Integer> createRange(Integer low, Integer high) {
+	private Map<Integer,Integer> createRange(Integer low, Integer high) {
+		Map<Integer,Integer> images = new HashMap<Integer,Integer>();
 		PriorityQueue<Integer> toProcess = initialElements(low, high);
-		SortedSet<Integer> visited = new TreeSet<Integer>();
-		visited.addAll(toProcess);
 		while (toProcess.size() > 0) {
-			Integer image = calculator.successorTo(toProcess.poll());
-			if (!visited.contains(image)) {
+			Integer element = toProcess.poll();
+			Integer image = calculator.successorTo(element);
+			images.put(element, image);
+			if (!images.containsKey(image)) {
 				toProcess.offer(image);
-				visited.add(image);
 			}
 		}
-		return asList(visited);
+		return images;
 	}
 
 	private PriorityQueue<Integer> initialElements(Integer low, Integer high) {
@@ -42,11 +46,4 @@ public class StandardCollatzCreationService implements CollatzCreationService {
 		}
 		return initialElements;
 	}
-
-	private List<Integer> asList(SortedSet<Integer> visited) {
-		List<Integer> result = new ArrayList<Integer>();
-		result.addAll(visited);
-		return result;
-	}
-
 }
