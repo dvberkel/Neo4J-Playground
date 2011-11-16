@@ -1,5 +1,7 @@
 package net.luminis.research.collatz.service.creation.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,8 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class StandardCollatzCreationServiceClosednessTest {
@@ -38,6 +38,10 @@ public class StandardCollatzCreationServiceClosednessTest {
 		List<Object[]> data = new ArrayList<Object[]>();
 		data.add(createInputData(1, 2, 1, 2, 4));
 		data.add(createInputData(1, 3, 1, 2, 3, 4, 5, 8, 10, 16));
+		data.add(createInputData(1, 4, 1, 2, 3, 4, 5, 8, 10, 16));
+		data.add(createInputData(1, 5, 1, 2, 3, 4, 5, 8, 10, 16));
+		data.add(createInputData(1, 6, 1, 2, 3, 4, 5, 6, 8, 10, 16));
+		data.add(createInputData(1, 7, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 16, 17, 20, 22, 26, 34, 40, 52));
 		return data;
 	}
 
