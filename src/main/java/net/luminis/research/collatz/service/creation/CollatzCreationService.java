@@ -1,9 +1,9 @@
 package net.luminis.research.collatz.service.creation;
 
-import java.util.List;
+import net.luminis.research.collatz.domain.CollatzDomain;
 
 public interface CollatzCreationService {
 
-	List<Integer> createRange(Integer low, Integer high);
+	CollatzDomain createDomain(Integer low, Integer high);
 
 }

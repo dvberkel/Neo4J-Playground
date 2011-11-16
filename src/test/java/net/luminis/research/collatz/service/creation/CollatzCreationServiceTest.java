@@ -1,11 +1,10 @@
 package net.luminis.research.collatz.service.creation;
 
-import java.util.List;
-
-import org.junit.Test;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import net.luminis.research.collatz.domain.CollatzDomain;
+
+import org.junit.Test;
 
 public class CollatzCreationServiceTest {
 	@Test
@@ -14,14 +13,15 @@ public class CollatzCreationServiceTest {
 	}
 
 	@Test
-	public void shouldHaveACreateRangeMethod() {
+	public void shouldHaveACreateDomainMethod() {
 		CollatzCreationService service = new CollatzCreationService() {
 			@Override
-			public List<Integer> createRange(Integer low, Integer high) {
+			public CollatzDomain createDomain(Integer low, Integer high) {
+				// TODO Auto-generated method stub
 				return null;
 			}
 		};
 
-		assertNull(service.createRange(1, 2));
+		assertNull(service.createDomain(1, 2));
 	}
 }

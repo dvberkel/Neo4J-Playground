@@ -8,6 +8,8 @@ import java.util.TreeSet;
 
 import net.luminis.research.collatz.calculator.CollatzCalculator;
 import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
+import net.luminis.research.collatz.domain.CollatzDomain;
+import net.luminis.research.collatz.domain.impl.StandardCollatzDomain;
 import net.luminis.research.collatz.service.creation.CollatzCreationService;
 
 public class StandardCollatzCreationService implements CollatzCreationService {
@@ -15,7 +17,11 @@ public class StandardCollatzCreationService implements CollatzCreationService {
 	private final CollatzCalculator calculator = new StandardCollatzCalculator();
 
 	@Override
-	public List<Integer> createRange(Integer low, Integer high) {
+	public CollatzDomain createDomain(Integer low, Integer high) {
+		return new StandardCollatzDomain(createRange(low, high));
+	}
+
+	private List<Integer> createRange(Integer low, Integer high) {
 		PriorityQueue<Integer> toProcess = initialElements(low, high);
 		SortedSet<Integer> visited = new TreeSet<Integer>();
 		visited.addAll(toProcess);
