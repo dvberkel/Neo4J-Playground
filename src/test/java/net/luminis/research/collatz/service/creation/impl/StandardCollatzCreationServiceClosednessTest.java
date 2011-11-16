@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
 import net.luminis.research.collatz.domain.CollatzDomain;
 import net.luminis.research.collatz.service.creation.CollatzCreationService;
 
@@ -29,7 +30,7 @@ public class StandardCollatzCreationServiceClosednessTest {
 
 	@Test
 	public void createdElements() {
-		CollatzCreationService service = new StandardCollatzCreationService();
+		CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator());
 		CollatzDomain domain = service.createDomain(low, high);
 
 		List<Integer> closedRange = domain.elements();

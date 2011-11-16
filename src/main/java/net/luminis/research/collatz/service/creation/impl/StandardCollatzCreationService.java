@@ -6,14 +6,17 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
 import net.luminis.research.collatz.calculator.CollatzCalculator;
-import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
 import net.luminis.research.collatz.domain.CollatzDomain;
 import net.luminis.research.collatz.domain.impl.StandardCollatzDomain;
 import net.luminis.research.collatz.service.creation.CollatzCreationService;
 
 public class StandardCollatzCreationService implements CollatzCreationService {
 
-	private final CollatzCalculator calculator = new StandardCollatzCalculator();
+	private final CollatzCalculator calculator;
+
+	public StandardCollatzCreationService(CollatzCalculator calculator) {
+		this.calculator = calculator;
+	}
 
 	@Override
 	public CollatzDomain createDomain(Integer low, Integer high) {
