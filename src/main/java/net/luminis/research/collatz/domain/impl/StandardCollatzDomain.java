@@ -27,4 +27,15 @@ public class StandardCollatzDomain implements CollatzDomain {
 		images.put(element,image);
 	}
 
+	@Override
+	public List<Integer> pathOf(Integer element) {
+		List<Integer> path = new ArrayList<Integer>();
+		path.add(element); int index = 0;
+		while (path.get(index).intValue() != 1) {
+			path.add(images.get(path.get(index)));
+			index++;
+		}
+		return path;
+	}
+
 }

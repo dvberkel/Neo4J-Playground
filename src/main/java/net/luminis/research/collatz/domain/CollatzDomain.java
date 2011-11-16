@@ -8,4 +8,6 @@ public interface CollatzDomain {
 
 	public void imageOf(Integer element, Integer image);
 
+	public List<Integer> pathOf(Integer element);
+
 }
