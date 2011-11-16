@@ -1,11 +1,10 @@
-package net.luminis.research.collatz;
+package net.luminis.research.collatz.calculator.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import net.luminis.research.collatz.calculator.CollatzCalculator;
-import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
