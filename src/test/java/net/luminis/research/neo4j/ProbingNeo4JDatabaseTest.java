@@ -167,14 +167,24 @@ public class ProbingNeo4JDatabaseTest {
 	private static void createNodeAndIndex(GraphDatabaseService aGraphDb) {
 		Transaction tx = aGraphDb.beginTx();
 		try {
-			Node special = aGraphDb.createNode();
-			special.setProperty(IDENTIFIABLE_KEY, Boolean.TRUE);
-			Index<Node> nodeIndex = graphDb.index().forNodes(NODE_INDEX_NAME);
-			nodeIndex.add(special, IDENTIFIABLE_KEY, Boolean.TRUE);
+			Node special = createNode(aGraphDb);
+			Index<Node> index = createIndex(special);
+			index.add(special, IDENTIFIABLE_KEY, Boolean.TRUE);
 			tx.success();
 		} finally {
 			tx.finish();
 		}
+	}
+
+	private static Index<Node> createIndex(Node special) {
+		Index<Node> nodeIndex = graphDb.index().forNodes(NODE_INDEX_NAME);
+		return nodeIndex;
+	}
+
+	private static Node createNode(GraphDatabaseService aGraphDb) {
+		Node special = aGraphDb.createNode();
+		special.setProperty(IDENTIFIABLE_KEY, Boolean.TRUE);
+		return special;
 	}
 
 	private static void createRelationship(GraphDatabaseService aGraphDb) {
