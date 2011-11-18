@@ -1,9 +1,5 @@
 package net.luminis.research.neo4j;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,10 +13,19 @@ import org.neo4j.graphdb.NotInTransactionException;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ProbingNeo4JDatabaseTest {
 	private static final String GRAPH_DB_PATH = "src/test/resources/graphdbs/starting";
+	private static final String NODE_INDEX_NAME = "specialNodes";
+	private static final String IDENTIFIABLE_KEY = "find me";
 	private static GraphDatabaseService graphDb;
 
 	@BeforeClass
@@ -28,7 +33,7 @@ public class ProbingNeo4JDatabaseTest {
 		deleteDir(GRAPH_DB_PATH);
 		graphDb = new EmbeddedGraphDatabase(GRAPH_DB_PATH);
 		registerShutdownHook(graphDb);
-		createNode(graphDb);
+		createNodeAndIndex(graphDb);
 		createRelationship(graphDb);
 	}
 
@@ -47,7 +52,7 @@ public class ProbingNeo4JDatabaseTest {
 		}
 	}
 
-	@Test(expected=NotInTransactionException.class)
+	@Test(expected = NotInTransactionException.class)
 	public void nodeCreationOutsideTransactionFail() {
 		graphDb.createNode();
 	}
@@ -121,10 +126,27 @@ public class ProbingNeo4JDatabaseTest {
 
 	private int countNodesOf(GraphDatabaseService aGraphDb) {
 		int nodeCount = 0;
-		for (@SuppressWarnings("unused") Node node : aGraphDb.getAllNodes()) {
+		for (@SuppressWarnings("unused")
+		Node node : aGraphDb.getAllNodes()) {
 			nodeCount++;
 		}
 		return nodeCount;
+	}
+
+	@Test
+	public void doesIndexExist() {
+		IndexManager manager = graphDb.index();
+
+		assertTrue(manager.existsForNodes(NODE_INDEX_NAME));
+	}
+
+	@Test
+	public void findNodeWithAnIndex() {
+		Index<Node> index = graphDb.index().forNodes(NODE_INDEX_NAME);
+
+		IndexHits<Node> hits = index.get(IDENTIFIABLE_KEY, Boolean.TRUE);
+
+		assertNotNull(hits.getSingle());
 	}
 
 	@AfterClass
@@ -142,10 +164,13 @@ public class ProbingNeo4JDatabaseTest {
 		});
 	}
 
-	private static void createNode(GraphDatabaseService aGraphDb) {
+	private static void createNodeAndIndex(GraphDatabaseService aGraphDb) {
 		Transaction tx = aGraphDb.beginTx();
 		try {
-			aGraphDb.createNode();
+			Node special = aGraphDb.createNode();
+			special.setProperty(IDENTIFIABLE_KEY, Boolean.TRUE);
+			Index<Node> nodeIndex = graphDb.index().forNodes(NODE_INDEX_NAME);
+			nodeIndex.add(special, IDENTIFIABLE_KEY, Boolean.TRUE);
 			tx.success();
 		} finally {
 			tx.finish();
