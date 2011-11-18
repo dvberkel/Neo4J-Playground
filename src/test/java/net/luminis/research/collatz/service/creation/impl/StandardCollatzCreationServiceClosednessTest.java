@@ -1,7 +1,5 @@
 package net.luminis.research.collatz.service.creation.impl;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,12 +7,15 @@ import java.util.List;
 
 import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
 import net.luminis.research.collatz.domain.CollatzDomain;
+import net.luminis.research.collatz.domain.provider.impl.StandardCollatzDomainProvider;
 import net.luminis.research.collatz.service.creation.CollatzCreationService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class StandardCollatzCreationServiceClosednessTest {
@@ -30,7 +31,8 @@ public class StandardCollatzCreationServiceClosednessTest {
 
 	@Test
 	public void createdElements() {
-		CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator());
+		CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
+			new StandardCollatzDomainProvider());
 		CollatzDomain domain = service.createDomain(low, high);
 
 		List<Integer> closedRange = domain.elements();
