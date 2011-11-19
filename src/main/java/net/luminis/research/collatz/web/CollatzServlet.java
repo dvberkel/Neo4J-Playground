@@ -27,7 +27,7 @@ public class CollatzServlet extends HttpServlet {
 		try {
 			start = Integer.valueOf(pathOf);
 		} catch (NumberFormatException e) {
-			start = 4;
+			start = 1;
 		}
 
 		CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
