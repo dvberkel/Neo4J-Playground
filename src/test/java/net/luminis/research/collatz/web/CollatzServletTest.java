@@ -48,14 +48,10 @@ public class CollatzServletTest {
 		SAXException {
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=4");
 
-		WebResponse response = client.getResponse(request);
-		JSONObject jsonObject = JSONObject.fromString(response.getText());
-		JSONArray jsonArray = jsonObject.getJSONArray("path");
+		JSONObject jsonObject = retrieveResponseFrom(request);
 
 		int[] expected = new int[] { 4, 2, 1 };
-		for (int index = 0; index < expected.length; index++) {
-			assertEquals(Integer.valueOf(expected[index]), jsonArray.get(index));
-		}
+		checkPath(jsonObject, expected);
 	}
 
 	@Test
@@ -63,14 +59,10 @@ public class CollatzServletTest {
 		SAXException {
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=5");
 
-		WebResponse response = client.getResponse(request);
-		JSONObject jsonObject = JSONObject.fromString(response.getText());
-		JSONArray jsonArray = jsonObject.getJSONArray("path");
+		JSONObject jsonObject = retrieveResponseFrom(request);
 
 		int[] expected = new int[] { 5, 16, 8, 4, 2, 1 };
-		for (int index = 0; index < expected.length; index++) {
-			assertEquals(Integer.valueOf(expected[index]), jsonArray.get(index));
-		}
+		checkPath(jsonObject, expected);
 	}
 
 	@Test
@@ -78,11 +70,19 @@ public class CollatzServletTest {
 		IOException, SAXException {
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz");
 
-		WebResponse response = client.getResponse(request);
-		JSONObject jsonObject = JSONObject.fromString(response.getText());
-		JSONArray jsonArray = jsonObject.getJSONArray("path");
+		JSONObject jsonObject = retrieveResponseFrom(request);
 
 		int[] expected = new int[] { 1 };
+		checkPath(jsonObject, expected);
+	}
+
+	private JSONObject retrieveResponseFrom(WebRequest request) throws IOException, SAXException {
+		WebResponse response = client.getResponse(request);
+		return JSONObject.fromString(response.getText());
+	}
+
+	private void checkPath(JSONObject jsonObject, int[] expected) {
+		JSONArray jsonArray = jsonObject.getJSONArray("path");
 		for (int index = 0; index < expected.length; index++) {
 			assertEquals(Integer.valueOf(expected[index]), jsonArray.get(index));
 		}
