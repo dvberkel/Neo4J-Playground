@@ -39,7 +39,7 @@ public class CollatzServletTest {
 		ServletUnitClient client = sr.newClient();
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=4");
 
-		WebResponse response = sr.getResponse(request);
+		WebResponse response = client.getResponse(request);
 
 		assertEquals("application/json", response.getContentType());
 	}
@@ -50,7 +50,7 @@ public class CollatzServletTest {
 		ServletUnitClient client = sr.newClient();
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=4");
 
-		WebResponse response = sr.getResponse(request);
+		WebResponse response = client.getResponse(request);
 		JSONObject jsonObject = JSONObject.fromString(response.getText());
 		JSONArray jsonArray = jsonObject.getJSONArray("path");
 
