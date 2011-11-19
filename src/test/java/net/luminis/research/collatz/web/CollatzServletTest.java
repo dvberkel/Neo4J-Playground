@@ -45,7 +45,7 @@ public class CollatzServletTest {
 	}
 
 	@Test
-	public void CollatzServletShouldReturnJsonRepresentationOfAPath() throws MalformedURLException, IOException,
+	public void CollatzServletShouldReturnJsonRepresentationOfAPath4() throws MalformedURLException, IOException,
 		SAXException {
 		ServletUnitClient client = sr.newClient();
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=4");
@@ -57,5 +57,23 @@ public class CollatzServletTest {
 		assertEquals(Integer.valueOf(4), jsonArray.get(0));
 		assertEquals(Integer.valueOf(2), jsonArray.get(1));
 		assertEquals(Integer.valueOf(1), jsonArray.get(2));
+	}
+
+	@Test
+	public void CollatzServletShouldReturnJsonRepresentationOfAPath5() throws MalformedURLException, IOException,
+		SAXException {
+		ServletUnitClient client = sr.newClient();
+		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=5");
+
+		WebResponse response = client.getResponse(request);
+		JSONObject jsonObject = JSONObject.fromString(response.getText());
+		JSONArray jsonArray = jsonObject.getJSONArray("path");
+
+		assertEquals(Integer.valueOf(5), jsonArray.get(0));
+		assertEquals(Integer.valueOf(16), jsonArray.get(1));
+		assertEquals(Integer.valueOf(8), jsonArray.get(2));
+		assertEquals(Integer.valueOf(4), jsonArray.get(3));
+		assertEquals(Integer.valueOf(2), jsonArray.get(4));
+		assertEquals(Integer.valueOf(1), jsonArray.get(5));
 	}
 }
