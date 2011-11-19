@@ -22,7 +22,7 @@ public class CollatzServlet extends HttpServlet {
 		JSONObject jsonObject = JSONObject.fromBean(bean);
 
 		PrintWriter out = response.getWriter();
-		response.addHeader("Content-type", "application/json");
+		response.setContentType("application/json");
 		out.println(jsonObject.toString());
 		out.flush();
 		out.close();
