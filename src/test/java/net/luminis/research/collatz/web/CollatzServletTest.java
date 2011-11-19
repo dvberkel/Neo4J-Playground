@@ -2,12 +2,18 @@ package net.luminis.research.collatz.web;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.xml.sax.SAXException;
 
 import com.meterware.httpunit.GetMethodWebRequest;
@@ -19,8 +25,23 @@ import com.meterware.servletunit.ServletUnitClient;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(Parameterized.class)
 public class CollatzServletTest {
 	private ServletUnitClient client;
+	private final String query;
+	private final int[] expected;
+
+	public CollatzServletTest(Integer start, int[] expected) {
+		this.query = determineQuery(start);
+		this.expected = expected;
+	}
+
+	private String determineQuery(Integer start) {
+		if (start != null) {
+			return String.format("?pathOf=%d", start);
+		}
+		return "";
+	}
 
 	@Before
 	public void setupServletRunnerAndClient() {
@@ -36,7 +57,7 @@ public class CollatzServletTest {
 
 	@Test
 	public void CollatzServletShouldReturnJson() throws MalformedURLException, IOException, SAXException {
-		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=4");
+		WebRequest request = new GetMethodWebRequest("http://localhost/collatz" + query);
 
 		WebResponse response = client.getResponse(request);
 
@@ -46,33 +67,10 @@ public class CollatzServletTest {
 	@Test
 	public void CollatzServletShouldReturnJsonRepresentationOfAPath4() throws MalformedURLException, IOException,
 		SAXException {
-		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=4");
+		WebRequest request = new GetMethodWebRequest("http://localhost/collatz" + query);
 
 		JSONObject jsonObject = retrieveResponseFrom(request);
 
-		int[] expected = new int[] { 4, 2, 1 };
-		checkPath(jsonObject, expected);
-	}
-
-	@Test
-	public void CollatzServletShouldReturnJsonRepresentationOfAPath5() throws MalformedURLException, IOException,
-		SAXException {
-		WebRequest request = new GetMethodWebRequest("http://localhost/collatz?pathOf=5");
-
-		JSONObject jsonObject = retrieveResponseFrom(request);
-
-		int[] expected = new int[] { 5, 16, 8, 4, 2, 1 };
-		checkPath(jsonObject, expected);
-	}
-
-	@Test
-	public void CollatzServletShouldReturnJsonRepresentationOfAPathWithQuery() throws MalformedURLException,
-		IOException, SAXException {
-		WebRequest request = new GetMethodWebRequest("http://localhost/collatz");
-
-		JSONObject jsonObject = retrieveResponseFrom(request);
-
-		int[] expected = new int[] { 1 };
 		checkPath(jsonObject, expected);
 	}
 
@@ -86,6 +84,15 @@ public class CollatzServletTest {
 		for (int index = 0; index < expected.length; index++) {
 			assertEquals(Integer.valueOf(expected[index]), jsonArray.get(index));
 		}
+	}
+
+	@Parameters
+	public static Collection<Object[]> data() {
+		List<Object[]> data = new ArrayList<Object[]>();
+		data.add(new Object[] { Integer.valueOf(4), new int[] { 4, 2, 1 } });
+		data.add(new Object[] { Integer.valueOf(5), new int[] { 5, 16, 8, 4, 2, 1 } });
+		data.add(new Object[] { null, new int[] { 1 } });
+		return data;
 	}
 
 }
