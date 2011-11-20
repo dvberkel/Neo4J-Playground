@@ -1,5 +1,6 @@
 package net.luminis.research.collatz.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -44,9 +45,8 @@ public class CollatzServletTest {
 	}
 
 	@Before
-	public void setupServletRunnerAndClient() {
-		ServletRunner sr = new ServletRunner();
-		sr.registerServlet("collatz", CollatzServlet.class.getName());
+	public void setupServletRunnerAndClient() throws IOException, SAXException {
+		ServletRunner sr = new ServletRunner(new File("src/main/webapp/WEB-INF/web.xml"));
 		client = sr.newClient();
 	}
 
