@@ -10,11 +10,14 @@ import net.luminis.research.collatz.domain.CollatzDomain;
 import net.luminis.research.collatz.domain.provider.CollatzDomainProvider;
 import net.luminis.research.collatz.service.creation.CollatzCreationService;
 
+import com.google.inject.Inject;
+
 public class StandardCollatzCreationService implements CollatzCreationService {
 
 	private final CollatzCalculator calculator;
 	private final CollatzDomainProvider provider;
 
+	@Inject
 	public StandardCollatzCreationService(CollatzCalculator calculator, CollatzDomainProvider provider) {
 		this.calculator = calculator;
 		this.provider = provider;

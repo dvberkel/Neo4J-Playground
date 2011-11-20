@@ -9,21 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.luminis.research.collatz.calculator.impl.StandardCollatzCalculator;
 import net.luminis.research.collatz.domain.CollatzDomain;
-import net.luminis.research.collatz.domain.provider.impl.StandardCollatzDomainProvider;
 import net.luminis.research.collatz.service.creation.CollatzCreationService;
-import net.luminis.research.collatz.service.creation.impl.StandardCollatzCreationService;
 import net.luminis.research.collatz.web.beans.CollatzPathBean;
 import net.sf.json.JSONObject;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class CollatzServlet extends HttpServlet {
 	private static final long serialVersionUID = 37L;
-	private final CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
-		new StandardCollatzDomainProvider());
+	@Inject
+	private CollatzCreationService service;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
