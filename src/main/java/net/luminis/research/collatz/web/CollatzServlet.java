@@ -19,6 +19,8 @@ import net.sf.json.JSONObject;
 
 public class CollatzServlet extends HttpServlet {
 	private static final long serialVersionUID = 37L;
+	private CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
+		new StandardCollatzDomainProvider());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,8 +42,6 @@ public class CollatzServlet extends HttpServlet {
 	}
 
 	private List<Integer> determinePathOf(Integer start) {
-		CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
-			new StandardCollatzDomainProvider());
 		CollatzDomain domain = service.createDomain(1, start);
 		List<Integer> path = domain.pathOf(start);
 		return path;
