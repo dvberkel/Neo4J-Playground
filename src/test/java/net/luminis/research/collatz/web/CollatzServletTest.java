@@ -11,6 +11,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -31,6 +32,12 @@ public class CollatzServletTest {
 	private ServletUnitClient client;
 	private final String query;
 	private final int[] expected;
+	private static ServletRunner sr;
+
+	@BeforeClass
+	public static void setupServletRunner() throws IOException, SAXException {
+		sr = new ServletRunner(new File("src/main/webapp/WEB-INF/web.xml"));
+	}
 
 	public CollatzServletTest(Integer start, int[] expected) {
 		this.query = determineQuery(start);
@@ -45,8 +52,7 @@ public class CollatzServletTest {
 	}
 
 	@Before
-	public void setupServletRunnerAndClient() throws IOException, SAXException {
-		ServletRunner sr = new ServletRunner(new File("src/main/webapp/WEB-INF/web.xml"));
+	public void setupServletRunnerAndClient() {
 		client = sr.newClient();
 	}
 
