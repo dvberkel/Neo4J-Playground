@@ -22,6 +22,13 @@ public class CollatzServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer start = determineStartFrom(request);
+		List<Integer> path = determinePathOf(start);
+		JSONObject jsonObject = createJsonObjectFrom(path);
+		writeRespone(response, jsonObject);
+	}
+
+	private Integer determineStartFrom(HttpServletRequest request) {
 		String pathOf = request.getParameter("pathOf");
 		Integer start = null;
 		try {
@@ -29,16 +36,24 @@ public class CollatzServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			start = 1;
 		}
+		return start;
+	}
 
+	private List<Integer> determinePathOf(Integer start) {
 		CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
 			new StandardCollatzDomainProvider());
 		CollatzDomain domain = service.createDomain(1, start);
 		List<Integer> path = domain.pathOf(start);
+		return path;
+	}
 
+	private JSONObject createJsonObjectFrom(List<Integer> path) {
 		CollatzPathBean bean = new CollatzPathBean();
 		bean.setPath(path);
-		JSONObject jsonObject = JSONObject.fromBean(bean);
+		return JSONObject.fromBean(bean);
+	}
 
+	private void writeRespone(HttpServletResponse response, JSONObject jsonObject) throws IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		out.println(jsonObject.toString());
