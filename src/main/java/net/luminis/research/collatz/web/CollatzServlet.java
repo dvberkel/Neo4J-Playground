@@ -17,9 +17,12 @@ import net.luminis.research.collatz.service.creation.impl.StandardCollatzCreatio
 import net.luminis.research.collatz.web.beans.CollatzPathBean;
 import net.sf.json.JSONObject;
 
+import com.google.inject.Singleton;
+
+@Singleton
 public class CollatzServlet extends HttpServlet {
 	private static final long serialVersionUID = 37L;
-	private CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
+	private final CollatzCreationService service = new StandardCollatzCreationService(new StandardCollatzCalculator(),
 		new StandardCollatzDomainProvider());
 
 	@Override
