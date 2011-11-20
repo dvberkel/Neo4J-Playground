@@ -5,6 +5,7 @@ import com.google.inject.servlet.ServletModule;
 public class CollatzServletModule extends ServletModule {
 
 	@Override
-	protected void configure() {
+	protected void configureServlets() {
+		super.configureServlets();
 	}
 }
