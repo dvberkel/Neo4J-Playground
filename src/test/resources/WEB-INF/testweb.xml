@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<display-name>Collatz Web Service</display-name>
+	
+	<listener>
+		<listener-class>net.luminis.research.collatz.web.guice.CollatzGuiceServletConfig</listener-class>
+	</listener>
+	
+	<filter>
+		<filter-name>guiceFilter</filter-name>
+		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>guiceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>collatz</servlet-name>
+		<servlet-class>net.luminis.research.collatz.web.CollatzServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>collatz</servlet-name>
+		<url-pattern>/collatz</url-pattern>
+	</servlet-mapping>
+</web-app>

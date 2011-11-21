@@ -36,7 +36,7 @@ public class CollatzServletTest {
 
 	@BeforeClass
 	public static void setupServletRunner() throws IOException, SAXException {
-		sr = new ServletRunner(new File("src/main/webapp/WEB-INF/web.xml"));
+		sr = new ServletRunner(new File("src/test/resources/WEB-INF/testweb.xml"));
 	}
 
 	public CollatzServletTest(Integer start, int[] expected) {
