@@ -178,7 +178,7 @@ class ProbeModule extends AbstractModule {
 	}
 
 	@Provides
-	ComplexStructure provideComplexStructure(@Named("lucky number") final Integer ranking) {
+	private ComplexStructure provideComplexStructure(@Named("lucky number") final Integer ranking) {
 		return new ComplexStructure() {
 
 			@Override
