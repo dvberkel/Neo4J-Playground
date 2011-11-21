@@ -71,7 +71,7 @@ public class CollatzServletTest {
 	}
 
 	@Test
-	public void CollatzServletShouldReturnJsonRepresentationOfAPath4() throws MalformedURLException, IOException,
+	public void CollatzServletShouldReturnJsonRepresentationOfAPath() throws MalformedURLException, IOException,
 		SAXException {
 		WebRequest request = new GetMethodWebRequest("http://localhost/collatz" + query);
 
