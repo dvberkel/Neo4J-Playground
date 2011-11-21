@@ -3,4 +3,5 @@
 .settings
 target
 
+graphdbs/**/*
 src/test/resources/graphdbs/**/*

@@ -24,7 +24,7 @@ public class CollatzModule extends AbstractModule {
 		bind(CollatzCreationService.class).to(StandardCollatzCreationService.class);
 		bind(CollatzCalculator.class).to(StandardCollatzCalculator.class);
 		bind(CollatzDomainProvider.class).to(Neo4JCollatzDomainProvider.class);
-		bind(String.class).annotatedWith(Names.named(GRAPH_DB_LOCATION)).toInstance("graphdb/collatz");
+		bind(String.class).annotatedWith(Names.named(GRAPH_DB_LOCATION)).toInstance("graphdbs/collatz");
 	}
 
 	@SuppressWarnings("unused")
