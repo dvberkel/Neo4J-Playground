@@ -6,10 +6,13 @@ import net.luminis.research.collatz.domain.provider.CollatzDomainProvider;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 
+import com.google.inject.Inject;
+
 public class Neo4JCollatzDomainProvider implements CollatzDomainProvider {
 	private final GraphDatabaseService graphDb;
 	private CollatzDomain instance;
 
+	@Inject
 	public Neo4JCollatzDomainProvider(GraphDatabaseService aGraphDb) {
 		this.graphDb = aGraphDb;
 	}
