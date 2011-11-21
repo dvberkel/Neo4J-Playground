@@ -33,8 +33,18 @@ public class CollatzModule extends AbstractModule {
 		@Named(GRAPH_DB_LOCATION) final String graphDbLocation) {
 		if (graphdb == null) {
 			graphdb = new EmbeddedGraphDatabase(graphDbLocation);
+			registerShutdownHook(graphdb);
 		}
 		return graphdb;
+	}
+
+	private void registerShutdownHook(final GraphDatabaseService aGraphDb) {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				aGraphDb.shutdown();
+			}
+		});
 	}
 
 }
