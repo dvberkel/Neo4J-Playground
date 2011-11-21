@@ -7,9 +7,34 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	
-	<name>neo4j</name>
-	<url>http://maven.apache.org</url>
+	<name>Collatz Conjecture Webservice</name>
+	<url>https://github.com/dvberkel/Neo4J-Playground</url>
+	<description>A toy application to discover the proper way of using Neo4J.</description>
 	
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/dvberkel/Neo4J-Playground/issues</url>
+	</issueManagement>  	
+
+	<developers>
+		<developer>
+			<id>dvb</id>
+			<name>Daan van Berkel</name>
+			<roles>
+				<role>Software developer</role>
+				<role>Architect</role>
+			</roles>
+			<organization>Luminis</organization>
+			<timezone>-1</timezone>
+		</developer>         
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://dvberkel@github.com/dvberkel/Neo4J-Playground.git</connection>
+		<developerConnection>scm:git:https://dvberkel@github.com/dvberkel/Neo4J-Playground.git</developerConnection>
+		<url>https://dvberkel@github.com/dvberkel/Neo4J-Playground.git</url>
+	</scm> 	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -67,7 +92,42 @@
 			<classifier>jdk15</classifier>   
 		</dependency>  
 	</dependencies>
-	
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.10</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.5.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<linkXref>true</linkXref>
+					<sourceEncoding>UTF-8</sourceEncoding>
+					<targetJdk>1.6</targetJdk>
+			</configuration>
+			</plugin>
+		</plugins>	
+	</reporting>
+
 	<build>
 		<finalName>collatz</finalName>
 		<plugins>
