@@ -43,7 +43,7 @@ public class CollatzServlet extends HttpServlet {
 	}
 
 	private List<Integer> determinePathOf(Integer start) {
-		CollatzDomain domain = service.createDomain(1, start);
+		CollatzDomain domain = service.createDomain(start, start);
 		List<Integer> path = domain.pathOf(start);
 		return path;
 	}
