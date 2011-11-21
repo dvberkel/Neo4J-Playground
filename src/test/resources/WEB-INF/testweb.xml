@@ -3,7 +3,7 @@
 	<display-name>Collatz Web Service</display-name>
 	
 	<listener>
-		<listener-class>net.luminis.research.collatz.web.guice.CollatzGuiceServletConfig</listener-class>
+		<listener-class>net.luminis.research.collatz.web.guice.CollatzGuiceServletTestConfig</listener-class>
 	</listener>
 	
 	<filter>
