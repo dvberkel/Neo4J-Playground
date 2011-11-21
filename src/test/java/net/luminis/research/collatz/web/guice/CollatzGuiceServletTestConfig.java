@@ -8,7 +8,7 @@ public class CollatzGuiceServletTestConfig extends GuiceServletContextListener {
 
 	@Override
 	protected Injector getInjector() {
-		return Guice.createInjector(new CollatzModule(), new CollatzServletModule());
+		return Guice.createInjector(new CollatzTestModule(), new CollatzServletModule());
 	}
 
 }
