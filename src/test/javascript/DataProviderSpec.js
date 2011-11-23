@@ -15,4 +15,15 @@ describe("DataProvider", function(){
 			});
 		});
 	});
+	
+	describe("methods of", function(){
+		var provider = new DataProvider.mock();
+		describe("mock", function(){
+			describe("pathOf", function(){
+				it("should exist", function(){
+					expect(provider.pathOf).toBeDefined();
+				});
+			});
+		});
+	});
 });
