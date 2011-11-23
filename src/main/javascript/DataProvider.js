@@ -14,6 +14,13 @@ var DataProvider = (function(){
 	}
 	
 	var Service = function(){
+		var _url = null;
+		
+		this.from = function(url) {
+			_url = url;
+			return this;
+		}
+		
 		var collatz = function(n) {
 			if (n % 2 == 0) {
 				return n / 2;
@@ -32,7 +39,9 @@ var DataProvider = (function(){
 		};
 		
 		this.pathOf = function(n){
-			return localPath(n);
+			if (_url === null) {
+				return localPath(n);
+			}
 		};
 	};
 	

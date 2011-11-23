@@ -45,8 +45,13 @@ describe("DataProvider", function(){
 			expect(DataProvider.service).toBeDefined();
 		});
 		
-		it("should be instantiatable()", function(){
+		it("should be instantiatable", function(){
 			var provider = new DataProvider.service();
+			expect(provider).toBeDefined();
+		});
+		
+		it("should Be customizable", function(){
+			var provider = new DataProvider.service().from('http://localhost:8080/collatz/collatz');
 			expect(provider).toBeDefined();
 		});
 
