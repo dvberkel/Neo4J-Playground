@@ -39,4 +39,33 @@ describe("DataProvider", function(){
 			});
 		});
 	});
+
+	describe("service",function(){
+		it("should exist", function(){
+			expect(DataProvider.service).toBeDefined();
+		});
+		
+		it("should be instantiatable()", function(){
+			var provider = new DataProvider.service();
+			expect(provider).toBeDefined();
+		});
+
+		describe("methods", function(){
+			var provider = new DataProvider.service();
+			describe("pathOf", function(){
+				it("should exist", function(){
+					expect(provider.pathOf).toBeDefined();
+				});
+				
+				it("should return a list of the collatz path from n", function(){
+					var expected = [[1, [1]], [2, [2, 1]], [3, [3, 10, 5, 16, 8, 4, 2, 1]], [4, [4, 2, 1]]];
+					for (var index = 0; index < expected.length; index++) {
+						var start = expected[index][0];
+						var path = expected[index][1];
+						expect(provider.pathOf(start)).toEqual(path);
+					}
+				}); 
+			});
+		});
+	});
 });
