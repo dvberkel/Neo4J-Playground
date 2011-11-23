@@ -38,9 +38,22 @@ var DataProvider = (function(){
 			return result;
 		};
 		
+		var path = function(n){
+			var url = _url + "?pathOf=" + n;
+			var request = new XMLHttpRequest();
+			request.open("GET", url, false);
+			request.setRequestHeader('Accept', 'application/json');
+			request.send();
+			console.log(url);
+			console.log(request.responseText);
+			
+		};
+		
 		this.pathOf = function(n){
 			if (_url === null) {
 				return localPath(n);
+			} else {
+				return path(n);
 			}
 		};
 	};
