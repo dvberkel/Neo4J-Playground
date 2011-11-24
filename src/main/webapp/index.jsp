@@ -5,14 +5,26 @@
 		<script>
 			var CollatzViewer = (function(){
 				var Model = function(){
+					var _observers = [];
+					
+					this.add = function(observer){
+						_observers.push(observer);
+					};
+					
 					this.pathOf = function(start) {
 						var url = "collatz?pathOf=" + start;
 						var request = new XMLHttpRequest();
 						request.open("GET", url, false);
 						request.send();
 						var json = $.parseJSON(request.responseText);
-						return json.path;
-					}
+						notify(json.path);
+					};
+					
+					var notify = function(path) {
+						for (var index = 0; index < _observers.length; index++) {
+							_observers[index].update(path);
+						}
+					};
 				};
 				
 				var View = function() {
@@ -24,9 +36,24 @@
 					}
 				};
 				
+				var Controller = function() {
+					var _model;
+					
+					this.of = function(model){
+						_model = model;
+						return this;
+					};
+					
+					this.update = function(){
+						var start = $("#start").val(); start = start ? start : "1";
+						_model.pathOf(start);						
+					};
+				}
+				
 				return function(){
 					var _model = new Model();
 					var _view = new View();
+					var _controller = new Controller();
 					var _element;
 					
 					this.on = function(id) {
@@ -35,6 +62,8 @@
 					};
 					
 					this.create = function() {
+						_model.add(_view);
+						_controller.of(_model);
 						_element.empty();
 						_element.append("<div class='collatzForm'><input id='start' value='37'/><button id='showPath'>ShowPath</button></div>");
 						_element.append("<div class='collatzPath'><ol id='path'></ol></div>");
@@ -43,9 +72,7 @@
 					
 					var initialize = function(){
 						$("#showPath").click(function(){
-							var start = $("#start").val(); start = start ? start : "1";
-							var path = _model.pathOf(start);
-							_view.update(path);
+							_controller.update();
 						});
 					};
 				}
