@@ -13,10 +13,20 @@
 						var json = $.parseJSON(request.responseText);
 						return json.path;
 					}
-				}
+				};
+				
+				var View = function() {
+					this.update = function(path){
+						var pathElement = $("#path").empty();
+						$(path).each(function(index, element){
+							pathElement.append("<li>" + element + "</li>");
+						});						
+					}
+				};
 				
 				return function(){
 					var _model = new Model();
+					var _view = new View();
 					var _element;
 					
 					this.on = function(id) {
@@ -35,10 +45,7 @@
 						$("#showPath").click(function(){
 							var start = $("#start").val(); start = start ? start : "1";
 							var path = _model.pathOf(start);
-							var pathElement = $("#path").empty();
-							$(path).each(function(index, element){
-								pathElement.append("<li>" + element + "</li>");
-							});
+							_view.update(path);
 						});
 					};
 				}
