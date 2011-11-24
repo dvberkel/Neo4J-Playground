@@ -9,6 +9,7 @@
 					
 					this.add = function(observer){
 						_observers.push(observer);
+						return this;
 					};
 					
 					this.pathOf = function(start) {
@@ -51,9 +52,7 @@
 				}
 				
 				return function(){
-					var _model = new Model();
-					var _view = new View();
-					var _controller = new Controller();
+					var _controller;
 					var _element;
 					
 					this.on = function(id) {
@@ -62,8 +61,7 @@
 					};
 					
 					this.create = function() {
-						_model.add(_view);
-						_controller.of(_model);
+						_controller = new Controller().of(new Model().add(new View()));
 						_element.empty();
 						_element.append("<div class='collatzForm'><input id='start' value='37'/><button id='showPath'>ShowPath</button></div>");
 						_element.append("<div class='collatzPath'><ol id='path'></ol></div>");
