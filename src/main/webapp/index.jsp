@@ -4,6 +4,17 @@
 		<script src="js/jquery/jquery-1.7.1.min.js"></script>
 		<script>
 			var CollatzViewer = (function(){
+				var Tagger = function(){
+					this.idFor = function(name){
+						return '#' + this.nameFor(name);
+					};
+					
+					this.nameFor = function(name){
+						return name;
+					};
+				};
+				var _tagger = new Tagger();
+				
 				var Model = function(){
 					var _observers = [];
 					
@@ -30,10 +41,14 @@
 				
 				var View = function() {
 					this.update = function(path){
-						var pathElement = $("#path").empty();
+						var pathElement = $(_tagger.idFor('path')).empty();
 						$(path).each(function(index, element){
 							pathElement.append("<li>" + element + "</li>");
 						});						
+					}
+					
+					this.representation = function() {
+						return "<div class='collatzPath'><ol id='" + _tagger.nameFor('path') + "'></ol></div>";
 					}
 				};
 				
@@ -46,8 +61,15 @@
 					};
 					
 					this.update = function(){
-						var start = $("#start").val(); start = start ? start : "1";
+						var start = $(_tagger.idFor('start')).val(); start = start ? start : "1";
 						_model.pathOf(start);						
+					};
+					
+					this.representation = function(){
+						return "<div class='collatzForm'>" + 
+								"<input id='" + _tagger.nameFor('start') + "' value='37'/>" + 
+								"<button id='" + _tagger.nameFor('showPath') + "'>ShowPath</button>" + 
+							"</div>";
 					};
 				}
 				
@@ -60,13 +82,12 @@
 					};
 					
 					this.create = function() {
-						var controller = new Controller().of(new Model().add(new View()));
+						var view = new View();
+						var controller = new Controller().of(new Model().add(view));
 						_element.empty();
-						_element.append("<div class='collatzForm'><input id='start' value='37'/><button id='showPath'>ShowPath</button></div>");
-						_element.append("<div class='collatzPath'><ol id='path'></ol></div>");
-						$("#showPath").click(function(){
-							controller.update();
-						});
+						_element.append(controller.representation());
+						_element.append(view.representation());
+						$("#showPath").click(function(){controller.update();});
 					};
 				}
 			})();
